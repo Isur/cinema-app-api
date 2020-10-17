@@ -1,0 +1,49 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: cinema-app-nginx
+    hostname: 'nginx'
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/proxy.conf:/etc/nginx/proxy.conf:ro
+      - ./nginx/ssl/localhost.crt:/etc/ssl/certs/localhost.crt:ro
+      - ./nginx/ssl/localhost.key:/etc/ssl/certs/localhost.key:ro
+      - ./nginx/logs/:/var/log/nginx/
+    ports:
+      - '80:80'
+      - '443:443'
+    depends_on:
+      - cinema-app-api
+    restart: always
+
+  cinema-app-api:
+    build: ./src
+    ports:
+      - '5000'
+    depends_on:
+      - cinema-app-database
+    restart: always
+
+  cinema-app-database:
+    image: postgres:13
+    container_name: cinema-app-database-postgres
+    restart: always
+    volumes:
+      - ./database/config:/docker-entrypoint-initdb.d/
+      - ./database/data:/var/lib/postgresql/data
+    environment: 
+      - POSTGRES_USER=cinema-app
+      - POSTGRES_PASSWORD=cinema-app
+
+  cinema-app-pgadmin:
+    image: dpage/pgadmin4
+    container_name: cinema-app-pgadmin
+    environment: 
+      PGADMIN_DEFAULT_EMAIL: cinema-app
+      PGADMIN_DEFAULT_PASSWORD: cinema-app
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+volumes:
+  pgadmin:

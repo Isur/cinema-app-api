@@ -19,4 +19,6 @@ RUN dotnet publish "cinema-app-api.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV ASPNETCORE_URLS http://*:5000
+ENV DOTNET_ENVIRONMENT docker
 ENTRYPOINT ["dotnet", "cinema-app-api.dll"]

@@ -8,6 +8,7 @@ namespace cinema_app_api.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<Movies> Movies { get; set; }
+        public DbSet<Halls> Halls { get; set; }
 
     }
 }
