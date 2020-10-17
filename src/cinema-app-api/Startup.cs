@@ -1,22 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using cinema_app_api.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Sockets;
-using System.Net;
 
 namespace cinema_app_api
 {
@@ -35,10 +25,13 @@ namespace cinema_app_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            if(_env.IsEnvironment("docker")) {
+            if (_env.IsEnvironment("docker"))
+            {
                 services.AddDbContext<DataContext>(p => p.UseNpgsql(Configuration.GetConnectionString("DockerConnection")));
                 Console.WriteLine($"Connection to the dabase: {Configuration.GetConnectionString("DockerConnection")}");
-            } else {
+            }
+            else
+            {
                 services.AddDbContext<DataContext>(p => p.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
                 Console.WriteLine($"Connection to the dabase: {Configuration.GetConnectionString("DefaultConnection")}");
             }
@@ -57,8 +50,10 @@ namespace cinema_app_api
                 app.UseDeveloperExceptionPage();
             }
 
-            if(env.IsEnvironment("docker")) {
-                using(var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope()) {
+            if (env.IsEnvironment("docker"))
+            {
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                {
                     serviceScope.ServiceProvider.GetService<DataContext>().Database.Migrate();
                 }
             }

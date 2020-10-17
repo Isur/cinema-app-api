@@ -39,3 +39,6 @@ msbuild.wrn
 # Logs
 **/*.log
 **/*.logs
+
+**/localhost.crt
+**/localhost.key
