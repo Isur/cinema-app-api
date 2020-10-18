@@ -2,11 +2,12 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace cinema_app_api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AppController : ControllerBase
     {
         private readonly ILogger<AppController> _logger;
@@ -17,6 +18,7 @@ namespace cinema_app_api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public string Get()
         {
             IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
@@ -25,7 +27,6 @@ namespace cinema_app_api.Controllers
             {
                 ips = $"{ips}\nIP: {ip}";
             }
-            _logger.LogInformation($"Request {Request.HttpContext.User}");
             return $"Host name: {Environment.MachineName} \nPath: {Request.Path}\nIps: {ips}";
         }
 

@@ -13,6 +13,10 @@ To load dependencies
 ```
 dotnet restore
 ```
+To update database
+```
+dotnet ef database update --project cinema-app-api
+```
 To run tests:
 ```
 dotnet test

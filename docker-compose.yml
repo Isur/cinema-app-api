@@ -37,7 +37,7 @@ services:
       - POSTGRES_PASSWORD=cinema-app
 
   cinema-app-pgadmin:
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:4.23
     container_name: cinema-app-pgadmin
     environment: 
       PGADMIN_DEFAULT_EMAIL: cinema-app
