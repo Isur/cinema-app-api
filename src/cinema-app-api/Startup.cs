@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using cinema_app_api.Repository;
+using cinema_app_api.Models;
 
 namespace cinema_app_api
 {
@@ -58,6 +60,8 @@ namespace cinema_app_api
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
+            
+            services.AddTransient<IBaseCrudService<Halls>, HallsCrudService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

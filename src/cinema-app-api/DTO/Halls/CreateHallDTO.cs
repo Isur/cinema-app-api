@@ -1,10 +1,6 @@
-using System;
-
-namespace cinema_app_api.Models
+namespace cinema_app_api.DTO
 {
-    public class Halls
-    {
-        public Guid Id { get; set; }
+    public class CreateHallDto {
         public string Name { get; set; }
         public int SizeX { get; set; }
         public int SizeY { get; set; }
