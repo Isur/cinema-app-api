@@ -62,6 +62,7 @@ namespace cinema_app_api
             });
             
             services.AddTransient<IBaseCrudService<Halls>, HallsCrudService>();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,6 +81,11 @@ namespace cinema_app_api
                     serviceScope.ServiceProvider.GetService<DataContext>().Database.Migrate();
                 }
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(s => {
+                s.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1.0");
+            });
 
             app.UseRouting();
 
