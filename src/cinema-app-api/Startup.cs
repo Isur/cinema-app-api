@@ -47,6 +47,13 @@ namespace cinema_app_api
                 };
             });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("Worker", policy => policy.RequireRole("Worker", "Admin"));
+                options.AddPolicy("User", policy => policy.RequireRole("User"));
+            });
+
             services.AddControllers();
             if (_env.IsEnvironment("docker"))
             {

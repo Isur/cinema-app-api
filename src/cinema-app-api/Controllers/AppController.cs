@@ -8,6 +8,7 @@ namespace cinema_app_api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Policy = "Worker")]
     public class AppController : ControllerBase
     {
         private readonly ILogger<AppController> _logger;
@@ -18,7 +19,6 @@ namespace cinema_app_api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public string Get()
         {
             IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());

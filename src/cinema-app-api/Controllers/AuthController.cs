@@ -51,7 +51,7 @@ namespace cinema_app_api.Controllers
                 claims: new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, dbUser.UserName),
-                    new Claim(ClaimTypes.Role, "Admin"),
+                    new Claim(ClaimTypes.Role, RoleHelper.RoleToString(dbUser.Role)),
                 },
                 expires: DateTime.Now.AddHours(8),
                 signingCredentials: signingCredentials

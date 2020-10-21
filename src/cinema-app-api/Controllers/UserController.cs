@@ -16,6 +16,7 @@ namespace cinema_app_api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Policy = "Worker")]
     public class UserController : CrudController<Users>
     {
         public UserController(IBaseCrudService<Users> crud) : base(crud) { }
