@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using cinema_app_api.Data;
+using cinema_app_api.DTO;
+using cinema_app_api.Helpers;
 using cinema_app_api.Models;
+using cinema_app_api.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,23 +16,54 @@ namespace cinema_app_api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController: ControllerBase
+    public class UserController : CrudController<Users>
     {
-        private readonly ILogger<UserController> _logger;
-        private readonly DataContext _context;
+        public UserController(IBaseCrudService<Users> crud) : base(crud) { }
 
-        public UserController(ILogger<UserController> logger, DataContext context)
-        {
-            _logger = logger;
-            _context = context;
-        }
         
-        [HttpGet("users")]
-        [Authorize]
-        public DbSet<Users> Get()
+        [HttpPost]
+        public IActionResult Post([FromBody] CreateUserDto model)
         {
-            var users = _context.Users;
-            return users;
+            if (model == null) return BadRequest("No data");
+            if (model.FirstName == null || model.FirstName == "") return BadRequest("No name");
+            if (model.LastName == null || model.LastName == "") return BadRequest("No name");
+            if (model.UserName == null || model.UserName == "") return BadRequest("No name");
+            if (model.Password == null || model.Password == "") return BadRequest("No name");
+
+            var user = new Users
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Role = model.Role,
+                UserName = model.UserName,
+                Password = PasswordHasher.Hash(model.Password),
+            };
+            var entity = _crud.AddItem(user);
+
+            return Ok(new { movie = entity });
         }
+
+        [HttpPatch, Route("{id}")]
+        public IActionResult Patch(string id, [FromBody] UpdateUserDto model)
+        {
+            if (model == null) return BadRequest("No data");
+            if (model.FirstName == null || model.FirstName == "") return BadRequest("No name");
+            if (model.LastName == null || model.LastName == "") return BadRequest("No name");
+            if (model.UserName == null || model.UserName == "") return BadRequest("No name");
+            if (model.Password == null || model.Password == "") return BadRequest("No name");
+
+            var user = new Users
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Role = model.Role,
+                UserName = model.UserName,
+                Password = PasswordHasher.Hash(model.Password),
+            };
+            
+            var entity = _crud.UpdateItem(id, user);
+            return Ok(new { movie = entity });
+        }
+
     }
 }

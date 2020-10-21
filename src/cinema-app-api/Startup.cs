@@ -42,11 +42,11 @@ namespace cinema_app_api
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = false,
-                    ValidateAudience =  false,
+                    ValidateAudience = false,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("Security:SecretKey"))),
                 };
             });
-            
+
             services.AddControllers();
             if (_env.IsEnvironment("docker"))
             {
@@ -60,8 +60,12 @@ namespace cinema_app_api
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
-            
+
             services.AddTransient<IBaseCrudService<Halls>, HallsCrudService>();
+            services.AddTransient<IBaseCrudService<Movies>, MoviesCrudService>();
+            services.AddTransient<IBaseCrudService<Showings>, ShowingsCrudService>();
+            services.AddTransient<IBaseCrudService<Tickets>, TicketsCrudService>();
+            services.AddTransient<IBaseCrudService<Users>, UsersCrudService>();
             services.AddSwaggerGen();
         }
 
@@ -83,7 +87,8 @@ namespace cinema_app_api
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(s => {
+            app.UseSwaggerUI(s =>
+            {
                 s.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1.0");
             });
 

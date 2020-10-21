@@ -13,29 +13,12 @@ namespace cinema_app_api.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
-    public class HallsController : ControllerBase
+    public class HallsController : CrudController<Halls>
     {
-        private readonly IBaseCrudService<Halls> _crud;
-
-        public HallsController(IBaseCrudService<Halls> crud)
-        {
-            _crud = crud;
-        }
-
-        [HttpGet]
-        public List<Halls> Get()
-        {
-            return _crud.GetItems();
-        }
-
-        [HttpGet, Route("{id}")]
-        public Halls GetHalls(string id)
-        {
-            return _crud.GetItem(id);
-        }
+        public HallsController(IBaseCrudService<Halls> crud) : base(crud) { }
 
         [HttpPost]
-        public IActionResult PostHalls([FromBody] CreateHallDto model)
+        public IActionResult PostHalls(CreateHallDto model)
         {
             if (model == null) return BadRequest("No data");
             if (model.Name == "" || model.Name == null) return BadRequest("No Name");
@@ -50,13 +33,6 @@ namespace cinema_app_api.Controllers
             var newHall = _crud.AddItem(hall);
 
             return Ok(new { hall = newHall });
-        }
-
-        [HttpDelete, Route("{id}")]
-        public IActionResult DeleteHalls(string id)
-        {
-            var deletedId = _crud.DeleteItem(id);
-            return Ok(new { id = deletedId });
         }
 
         [HttpPatch, Route("{id}")]
