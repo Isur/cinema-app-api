@@ -41,7 +41,7 @@ namespace cinema_app_api.Controllers
             };
             var entity = _crud.AddItem(user);
 
-            return Ok(new { movie = entity });
+            return Ok(new { user = entity });
         }
 
         [HttpPatch, Route("{id}")]
@@ -63,7 +63,7 @@ namespace cinema_app_api.Controllers
             };
             
             var entity = _crud.UpdateItem(id, user);
-            return Ok(new { movie = entity });
+            return Ok(new { user = entity });
         }
 
     }

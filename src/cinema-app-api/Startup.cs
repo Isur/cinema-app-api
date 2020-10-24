@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft;
 using cinema_app_api.Repository;
 using cinema_app_api.Models;
 
@@ -33,7 +34,8 @@ namespace cinema_app_api
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",
-                builder =>     {
+                builder =>
+                {
                     builder
                     .AllowAnyOrigin()
                     .AllowAnyMethod()
@@ -65,7 +67,9 @@ namespace cinema_app_api
                 options.AddPolicy("User", policy => policy.RequireRole("User"));
             });
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
             if (_env.IsEnvironment("docker"))
             {
                 services.AddDbContext<DataContext>(p => p.UseNpgsql(Configuration.GetConnectionString("DockerConnection")));

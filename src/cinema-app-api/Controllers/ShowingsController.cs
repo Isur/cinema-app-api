@@ -39,7 +39,7 @@ namespace cinema_app_api.Controllers
             };
             var entity = _crud.AddItem(show);
 
-            return Ok(new { movie = entity });
+            return Ok(new { showing = entity });
         }
 
         [HttpPatch, Route("{id}")]
@@ -60,7 +60,7 @@ namespace cinema_app_api.Controllers
                 Time = model.Time,
             };
             var entity = _crud.UpdateItem(id, show);
-            return Ok(new { movie = entity });
+            return Ok(new { showing = entity });
         }
     }
 }
