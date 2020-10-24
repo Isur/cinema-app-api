@@ -20,7 +20,7 @@ namespace cinema_app_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController: ControllerBase
+    public class AuthController : ControllerBase
     {
 
         private readonly ILogger<AuthController> _logger;
@@ -44,7 +44,7 @@ namespace cinema_app_api.Controllers
 
             if (dbUser == null) return Unauthorized("Wrong password or username");
             if (!PasswordHasher.Verify(user.Password, dbUser.Password)) return Unauthorized();
-            
+
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Security:SecretKey")));
             var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
             var tokenOptions = new JwtSecurityToken(
@@ -58,7 +58,14 @@ namespace cinema_app_api.Controllers
             );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
-            return Ok(new {Token = tokenString});
+            return Ok(new
+            {
+                Token = tokenString,
+                FirstName = dbUser.FirstName,
+                LastName = dbUser.LastName,
+                UserName = dbUser.UserName,
+                Role = RoleHelper.RoleToString(dbUser.Role),
+            });
         }
 
         [HttpPost, Route("register")]
@@ -82,7 +89,7 @@ namespace cinema_app_api.Controllers
 
             var us = await _context.Users.AddAsync(u);
             await _context.SaveChangesAsync();
-            return Ok(new {id = us.Entity.Id});
+            return Ok(new { id = us.Entity.Id });
         }
     }
 }
