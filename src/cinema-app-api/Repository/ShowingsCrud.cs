@@ -41,7 +41,10 @@ namespace cinema_app_api.Repository
 
         public override Showings GetItem(string id)
         {
-            var entity = _context.Showings.Include(c => c.Tickets).FirstOrDefault(c => c.Id == new Guid(id));
+            var entity = _context.Showings
+                .Include(c => c.Tickets)
+                .Include(c => c.Hall)
+                .FirstOrDefault(c => c.Id == new Guid(id));
             return entity;
         }
     }

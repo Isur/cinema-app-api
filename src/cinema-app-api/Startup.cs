@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft;
 using cinema_app_api.Repository;
 using cinema_app_api.Models;
+using cinema_app_api.Repository.ExtendedRepositories;
 
 namespace cinema_app_api
 {
@@ -86,7 +87,7 @@ namespace cinema_app_api
             services.AddTransient<IBaseCrudService<Halls>, HallsCrudService>();
             services.AddTransient<IBaseCrudService<Movies>, MoviesCrudService>();
             services.AddTransient<IBaseCrudService<Showings>, ShowingsCrudService>();
-            services.AddTransient<IBaseCrudService<Tickets>, TicketsCrudService>();
+            services.AddTransient<ITicketRepository, TicketsCrudService>();
             services.AddTransient<IBaseCrudService<Users>, UsersCrudService>();
             services.AddSwaggerGen();
         }

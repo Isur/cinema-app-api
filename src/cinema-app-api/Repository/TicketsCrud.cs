@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using cinema_app_api.Data;
 using cinema_app_api.Models;
+using cinema_app_api.Repository.ExtendedRepositories;
 
 namespace cinema_app_api.Repository
 {
-    public class TicketsCrudService : BaseCrudService<Tickets>
+    public class TicketsCrudService : BaseCrudService<Tickets>, ITicketRepository
     {
         public TicketsCrudService(DataContext context) : base(context) { }
         public override Tickets AddItem(Tickets item)
@@ -42,6 +43,12 @@ namespace cinema_app_api.Repository
         {
             var entity = _context.Tickets.Find(new Guid(id));
             return entity;
+        }
+
+        public bool CheckIfFree(int x, int y)
+        {
+            var ticket = _context.Tickets.FirstOrDefault(entity => entity.FieldX == x && entity.FieldY == y);
+            return ticket == null;
         }
     }
 }
