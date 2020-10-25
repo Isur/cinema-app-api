@@ -14,19 +14,19 @@ namespace cinema_app_api.Controllers
         }
 
         [HttpGet]
-        public List<T> GetList()
+        virtual public List<T> GetList()
         {
             return _crud.GetItems();
         }
 
         [HttpGet, Route("{id}")]
-        public T Get(string id)
+        virtual public T Get(string id)
         {
             return _crud.GetItem(id);
         }
 
         [HttpDelete, Route("{id}")]
-        public IActionResult Delete(string id)
+        virtual public IActionResult Delete(string id)
         {
             var deletedId = _crud.DeleteItem(id);
             return Ok(new { id = deletedId });

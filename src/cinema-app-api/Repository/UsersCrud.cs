@@ -10,25 +10,15 @@ namespace cinema_app_api.Repository
 {
     public class UsersCrudService : BaseCrudService<Users>
     {
-        private readonly IEncryptor _encryptor;
-
-        public UsersCrudService(DataContext context, IEncryptor encryptor) : base(context)
-        {
-            _encryptor = encryptor;
-        }
+        public UsersCrudService(DataContext context) : base(context) { }
         public override Users AddItem(Users item)
         {
             var existing = _context.Users.FirstOrDefault(d => d.UserName == item.UserName);
             if (existing != null) return null;
-            
-            item.FirstName = _encryptor.Encrypt(item.FirstName);
-            item.LastName = _encryptor.Encrypt(item.LastName);
 
             var entity = _context.Add(item);
             _context.SaveChanges();
-            
-            entity.Entity.FirstName = _encryptor.Decrypt(entity.Entity.FirstName);
-            entity.Entity.LastName = _encryptor.Decrypt(entity.Entity.LastName);
+
             return entity.Entity;
         }
 
@@ -43,37 +33,24 @@ namespace cinema_app_api.Repository
         public override List<Users> GetItems()
         {
             var entities = _context.Users.AsQueryable().ToList();
-            foreach (var entity in entities)
-            {
-                entity.Password = null;
-                entity.FirstName = _encryptor.Decrypt(entity.FirstName);
-                entity.LastName = _encryptor.Decrypt(entity.LastName);
-            }
+
             return entities;
         }
 
         public override Users UpdateItem(string id, Users item)
         {
-            
-            item.Id = new Guid(id);
-            item.FirstName = _encryptor.Encrypt(item.FirstName);
-            item.LastName = _encryptor.Encrypt(item.LastName);
-            
-            var entity = _context.Users.Update(item);
+            var entity = _context.Users.FirstOrDefault(c => c.Id == new Guid(id));
+            entity.LastName = item.LastName;
+            entity.Role = item.Role;
+            entity.UserName = item.UserName;
+            entity.FirstName = item.FirstName;
             _context.SaveChanges();
-
-            entity.Entity.FirstName = _encryptor.Decrypt(entity.Entity.FirstName);
-            entity.Entity.LastName = _encryptor.Decrypt(entity.Entity.LastName);
-            
-            return entity.Entity;
+            return entity;
         }
 
         public override Users GetItem(string id)
         {
             var entity = _context.Users.Find(new Guid(id));
-            entity.Password = null;
-            entity.FirstName = _encryptor.Decrypt(entity.FirstName);
-            entity.LastName = _encryptor.Decrypt(entity.LastName);
             return entity;
         }
     }

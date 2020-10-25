@@ -19,9 +19,35 @@ namespace cinema_app_api.Controllers
     [Authorize(Policy = "Worker")]
     public class UsersController : CrudController<Users>
     {
-        public UsersController(IBaseCrudService<Users> crud) : base(crud) { }
+        private readonly IEncryptor _encryptor;
+        public UsersController(IBaseCrudService<Users> crud, IEncryptor encryptor) : base(crud)
+        {
+            _encryptor = encryptor;
+        }
 
-        
+        [HttpGet, Route("{id}")]
+        override public Users Get(string id)
+        {
+            var entity = _crud.GetItem(id);
+            entity.Password = null;
+            entity.FirstName = _encryptor.Decrypt(entity.FirstName);
+            entity.LastName = _encryptor.Decrypt(entity.LastName);
+            return entity;
+        }
+
+        [HttpGet]
+        override public List<Users> GetList()
+        {
+            var list = _crud.GetItems();
+            foreach (var user in list)
+            {
+                user.Password = null;
+                user.FirstName = _encryptor.Decrypt(user.FirstName);
+                user.LastName = _encryptor.Decrypt(user.LastName);
+            }
+            return list;
+        }
+
         [HttpPost]
         public IActionResult Post([FromBody] CreateUserDto model)
         {
@@ -30,17 +56,20 @@ namespace cinema_app_api.Controllers
             if (string.IsNullOrEmpty(model.LastName)) return BadRequest("No last name");
             if (string.IsNullOrEmpty(model.UserName)) return BadRequest("No user name");
             if (string.IsNullOrEmpty(model.Password)) return BadRequest("No password");
-            
+
             var user = new Users
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
+                FirstName = _encryptor.Encrypt(model.FirstName),
+                LastName = _encryptor.Encrypt(model.LastName),
                 Role = model.Role,
                 UserName = model.UserName,
                 Password = PasswordHasher.Hash(model.Password),
             };
             var entity = _crud.AddItem(user);
             if (entity == null) return BadRequest("User already exists");
+            entity.Password = null;
+            entity.FirstName = _encryptor.Decrypt(entity.FirstName);
+            entity.LastName = _encryptor.Decrypt(entity.LastName);
             return Ok(new { user = entity });
         }
 
@@ -51,18 +80,19 @@ namespace cinema_app_api.Controllers
             if (string.IsNullOrEmpty(model.FirstName)) return BadRequest("No first name");
             if (string.IsNullOrEmpty(model.LastName)) return BadRequest("No last name");
             if (string.IsNullOrEmpty(model.UserName)) return BadRequest("No user name");
-            if (string.IsNullOrEmpty(model.Password)) return BadRequest("No password");
 
             var user = new Users
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
+                FirstName = _encryptor.Encrypt(model.FirstName),
+                LastName = _encryptor.Encrypt(model.LastName),
                 Role = model.Role,
                 UserName = model.UserName,
-                Password = PasswordHasher.Hash(model.Password),
             };
-            
+
             var entity = _crud.UpdateItem(id, user);
+            entity.Password = null;
+            entity.FirstName = _encryptor.Decrypt(entity.FirstName);
+            entity.LastName = _encryptor.Decrypt(entity.LastName);
             return Ok(new { user = entity });
         }
 

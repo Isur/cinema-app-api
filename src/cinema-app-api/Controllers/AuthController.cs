@@ -26,12 +26,17 @@ namespace cinema_app_api.Controllers
         private readonly ILogger<AuthController> _logger;
         private readonly IConfiguration _configuration;
         private readonly DataContext _context;
-        public AuthController(ILogger<AuthController> logger, IConfiguration configuration, DataContext
-            context)
+        private readonly IEncryptor _encryptor;
+        public AuthController(
+            ILogger<AuthController> logger,
+            IConfiguration configuration,
+            DataContext context,
+            IEncryptor encryptor)
         {
             _logger = logger;
             _configuration = configuration;
             _context = context;
+            _encryptor = encryptor;
         }
         [HttpPost, Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO user)
@@ -60,8 +65,8 @@ namespace cinema_app_api.Controllers
             return Ok(new
             {
                 Token = tokenString,
-                FirstName = dbUser.FirstName,
-                LastName = dbUser.LastName,
+                FirstName = _encryptor.Decrypt(dbUser.FirstName),
+                LastName = _encryptor.Decrypt(dbUser.LastName),
                 UserName = dbUser.UserName,
                 Id = dbUser.Id,
                 Role = RoleHelper.RoleToString(dbUser.Role),
@@ -81,8 +86,8 @@ namespace cinema_app_api.Controllers
 
             var u = new Users
             {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                FirstName = _encryptor.Encrypt(user.FirstName),
+                LastName = _encryptor.Encrypt(user.LastName),
                 UserName = user.UserName,
                 Password = PasswordHasher.Hash(user.Password),
             };
