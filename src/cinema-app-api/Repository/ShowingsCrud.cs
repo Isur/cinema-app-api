@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using cinema_app_api.Data;
 using cinema_app_api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace cinema_app_api.Repository
 {
@@ -26,7 +27,7 @@ namespace cinema_app_api.Repository
 
         public override List<Showings> GetItems()
         {
-            var entities = _context.Showings.AsQueryable().ToList();
+            var entities = _context.Showings.AsQueryable().Include(c => c.Tickets).ToList();
             return entities;
         }
 
@@ -40,7 +41,7 @@ namespace cinema_app_api.Repository
 
         public override Showings GetItem(string id)
         {
-            var entity = _context.Showings.Find(new Guid(id));
+            var entity = _context.Showings.Include(c => c.Tickets).FirstOrDefault(c => c.Id == new Guid(id));
             return entity;
         }
     }

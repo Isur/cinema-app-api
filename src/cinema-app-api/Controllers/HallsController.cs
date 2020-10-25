@@ -21,7 +21,7 @@ namespace cinema_app_api.Controllers
         public IActionResult PostHalls(CreateHallDto model)
         {
             if (model == null) return BadRequest("No data");
-            if (model.Name == "" || model.Name == null) return BadRequest("No Name");
+            if (string.IsNullOrEmpty(model.Name)) return BadRequest("No Name");
             if (model.SizeX == 0) return BadRequest("No SizeX");
             if (model.SizeY == 0) return BadRequest("No SizeY");
             var hall = new Halls
@@ -38,6 +38,10 @@ namespace cinema_app_api.Controllers
         [HttpPatch, Route("{id}")]
         public IActionResult PatchHalls(string id, UpdateHallDto model)
         {
+            if (model == null) return BadRequest("No data");
+            if (string.IsNullOrEmpty(model.Name)) return BadRequest("No Name");
+            if (model.SizeX == 0) return BadRequest("No SizeX");
+            if (model.SizeY == 0) return BadRequest("No SizeY");
             var hall = new Halls
             {
                 Name = model.Name,

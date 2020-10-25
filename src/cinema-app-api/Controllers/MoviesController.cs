@@ -15,8 +15,8 @@ namespace cinema_app_api.Controllers
         public IActionResult Post([FromBody] CreateMovieDto model)
         {
             if (model == null) return BadRequest("No data");
-            if (model.Title == "" || model.Title == null) return BadRequest("No name");
-            if (model.Director == "" || model.Director == null) return BadRequest("No director");
+            if (string.IsNullOrEmpty(model.Title)) return BadRequest("No name");
+            if (string.IsNullOrEmpty(model.Director)) return BadRequest("No director");
             if (model.Year == 0) return BadRequest("No year");
 
             var movie = new Movies
@@ -34,8 +34,8 @@ namespace cinema_app_api.Controllers
         public IActionResult Patch(string id, [FromBody] UpdateMovieDto model)
         {
             if (model == null) return BadRequest("No data");
-            if (model.Title == "" || model.Title == null) return BadRequest("No name");
-            if (model.Director == "" || model.Director == null) return BadRequest("No director");
+            if (string.IsNullOrEmpty(model.Title)) return BadRequest("No name");
+            if (string.IsNullOrEmpty(model.Director)) return BadRequest("No director");
             if (model.Year == 0) return BadRequest("No year");
 
             var movie = new Movies

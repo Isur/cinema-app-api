@@ -64,6 +64,7 @@ namespace cinema_app_api.Controllers
                 FirstName = dbUser.FirstName,
                 LastName = dbUser.LastName,
                 UserName = dbUser.UserName,
+                Id = dbUser.Id,
                 Role = RoleHelper.RoleToString(dbUser.Role),
             });
         }

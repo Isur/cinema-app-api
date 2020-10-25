@@ -24,8 +24,8 @@ namespace cinema_app_api.Controllers
         public IActionResult Post([FromBody] CreateShowingDto model)
         {
             if (model == null) return BadRequest("No data");
-            if (model.Hall == null || model.Hall == "") return BadRequest("No name");
-            if (model.Movie == null || model.Movie == "") return BadRequest("No director");
+            if (string.IsNullOrEmpty(model.Hall)) return BadRequest("No hall");
+            if (string.IsNullOrEmpty(model.Movie)) return BadRequest("No movie");
             if (model.Time == null) return BadRequest("No time");
 
             var hall = _crudHalls.GetItem(model.Hall);
@@ -46,8 +46,8 @@ namespace cinema_app_api.Controllers
         public IActionResult Patch(string id, [FromBody] UpdateShowingDto model)
         {
             if (model == null) return BadRequest("No data");
-            if (model.Hall == null || model.Hall == "") return BadRequest("No name");
-            if (model.Movie == null || model.Movie == "") return BadRequest("No director");
+            if (string.IsNullOrEmpty(model.Hall)) return BadRequest("No hall");
+            if (string.IsNullOrEmpty(model.Movie)) return BadRequest("No movie");
             if (model.Time == null) return BadRequest("No time");
 
             var hall = _crudHalls.GetItem(model.Hall);

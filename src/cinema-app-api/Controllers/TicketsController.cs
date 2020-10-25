@@ -24,8 +24,8 @@ namespace cinema_app_api.Controllers
         public IActionResult Post([FromBody] CreateTicketDto model)
         {
             if (model == null) return BadRequest("No data");
-            if (model.Showing == null || model.Showing == "") return BadRequest("No name");
-            if (model.User == null || model.User == "") return BadRequest("No director");
+            if (model.Showing == null || model.Showing == "") return BadRequest("No Showing");
+            if (model.User == null || model.User == "") return BadRequest("No User");
             if(model.FieldX == 0) return BadRequest("No fieldX");
             if(model.FieldY == 0) return BadRequest("No fieldY");
 
@@ -38,6 +38,7 @@ namespace cinema_app_api.Controllers
                 User = user,
                 FieldX = model.FieldX,
                 FieldY = model.FieldY,
+                Status = model.Status,
             };
             var entity = _crud.AddItem(ticket);
 
@@ -48,8 +49,8 @@ namespace cinema_app_api.Controllers
         public IActionResult Patch(string id, [FromBody] UpdateTicketDto model)
         {
             if (model == null) return BadRequest("No data");
-            if (model.Showing == null || model.Showing == "") return BadRequest("No name");
-            if (model.User == null || model.User == "") return BadRequest("No director");
+            if (model.Showing == null || model.Showing == "") return BadRequest("No Showing");
+            if (model.User == null || model.User == "") return BadRequest("No User");
             if(model.FieldX == 0) return BadRequest("No fieldX");
             if(model.FieldY == 0) return BadRequest("No fieldY");
 
@@ -62,6 +63,7 @@ namespace cinema_app_api.Controllers
                 User = user,
                 FieldX = model.FieldX,
                 FieldY = model.FieldY,
+                Status = model.Status,
             };
             
             var entity = _crud.UpdateItem(id, ticket);

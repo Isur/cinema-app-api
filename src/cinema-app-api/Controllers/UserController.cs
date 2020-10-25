@@ -26,10 +26,10 @@ namespace cinema_app_api.Controllers
         public IActionResult Post([FromBody] CreateUserDto model)
         {
             if (model == null) return BadRequest("No data");
-            if (model.FirstName == null || model.FirstName == "") return BadRequest("No name");
-            if (model.LastName == null || model.LastName == "") return BadRequest("No name");
-            if (model.UserName == null || model.UserName == "") return BadRequest("No name");
-            if (model.Password == null || model.Password == "") return BadRequest("No name");
+            if (string.IsNullOrEmpty(model.FirstName)) return BadRequest("No first name");
+            if (string.IsNullOrEmpty(model.LastName)) return BadRequest("No last name");
+            if (string.IsNullOrEmpty(model.UserName)) return BadRequest("No user name");
+            if (string.IsNullOrEmpty(model.Password)) return BadRequest("No password");
 
             var user = new Users
             {
@@ -48,10 +48,10 @@ namespace cinema_app_api.Controllers
         public IActionResult Patch(string id, [FromBody] UpdateUserDto model)
         {
             if (model == null) return BadRequest("No data");
-            if (model.FirstName == null || model.FirstName == "") return BadRequest("No name");
-            if (model.LastName == null || model.LastName == "") return BadRequest("No name");
-            if (model.UserName == null || model.UserName == "") return BadRequest("No name");
-            if (model.Password == null || model.Password == "") return BadRequest("No name");
+            if (string.IsNullOrEmpty(model.FirstName)) return BadRequest("No first name");
+            if (string.IsNullOrEmpty(model.LastName)) return BadRequest("No last name");
+            if (string.IsNullOrEmpty(model.UserName)) return BadRequest("No user name");
+            if (string.IsNullOrEmpty(model.Password)) return BadRequest("No password");
 
             var user = new Users
             {
