@@ -66,6 +66,9 @@ namespace cinema_app_api.Controllers
             var user = _crudUsers.GetItem(model.User);
             var show = _crudShowings.GetItem(model.Showing);
 
+            var placeIsFree = _crud.CheckIfCanUpdate(model.FieldX, model.FieldY, id);
+            if (!placeIsFree) return BadRequest("Slot taken");
+
             var ticket = new Tickets
             {
                 Showing = show,

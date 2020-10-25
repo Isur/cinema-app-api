@@ -33,10 +33,14 @@ namespace cinema_app_api.Repository
 
         public override Tickets UpdateItem(string id, Tickets item)
         {
-            item.Id = new Guid(id);
-            var entities = _context.Tickets.Update(item);
+            var entity = _context.Tickets.FirstOrDefault(c => c.Id == new Guid(id));
+            entity.Showing = item.Showing;
+            entity.Status = item.Status;
+            entity.FieldX = item.FieldX;
+            entity.FieldY = item.FieldY;
+            entity.User = item.User;
             _context.SaveChanges();
-            return entities.Entity;
+            return entity;
         }
 
         public override Tickets GetItem(string id)
@@ -50,5 +54,10 @@ namespace cinema_app_api.Repository
             var ticket = _context.Tickets.FirstOrDefault(entity => entity.FieldX == x && entity.FieldY == y);
             return ticket == null;
         }
+
+        public bool CheckIfCanUpdate(int x, int y, string id) {
+            var ticket = _context.Tickets.FirstOrDefault(entity => entity.FieldX == x && entity.FieldY == y && entity.Id != new Guid(id));
+            return ticket == null;
+        } 
     }
 }
