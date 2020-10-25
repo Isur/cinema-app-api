@@ -10,6 +10,7 @@ namespace cinema_app_api.Helpers
         private const int Iterations = 10;
         public static string Hash(string password)
         {
+            if (string.IsNullOrEmpty(password)) return "";
             byte[] salt;
             new RNGCryptoServiceProvider().GetBytes(salt = new byte[SaltSize]);
 
@@ -27,6 +28,7 @@ namespace cinema_app_api.Helpers
 
         public static bool Verify(string password, string hash)
         {
+            if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(hash)) return false;
             var stringHash = Convert.FromBase64String(new String(hash));
             var salt = new byte[SaltSize];
             Array.Copy(stringHash, 0, salt, 0, SaltSize);

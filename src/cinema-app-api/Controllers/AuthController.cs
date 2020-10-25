@@ -41,9 +41,8 @@ namespace cinema_app_api.Controllers
                 return BadRequest("Data not provided");
             }
             var dbUser = await _context.Users.FirstOrDefaultAsync(db => db.UserName == user.UserName);
-
             if (dbUser == null) return Unauthorized("Wrong password or username");
-            if (!PasswordHasher.Verify(user.Password, dbUser.Password)) return Unauthorized();
+            if (!PasswordHasher.Verify(user.Password, dbUser.Password)) return Unauthorized("Wrong username or password");
 
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Security:SecretKey")));
             var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
@@ -77,7 +76,7 @@ namespace cinema_app_api.Controllers
                 return BadRequest("Data not provided");
             }
 
-            var existing = _context.Users.FirstOrDefault(u => u.UserName == user.UserName);
+            var existing = _context.Users.FirstOrDefault(d => d.UserName == user.UserName);
             if (existing != null) return BadRequest("User already exists!");
 
             var u = new Users

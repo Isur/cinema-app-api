@@ -4,8 +4,9 @@ namespace cinema_app_api.Helpers
     {
         private const int SHIFT = 1;
         private const int ALPHABET_LENGTH = 26;
-        override public string Decrypt(string text)
+        public override string Decrypt(string text)
         {
+            if (string.IsNullOrEmpty(text)) return "";
             string code = "";
             foreach (char character in text)
             {
@@ -14,8 +15,9 @@ namespace cinema_app_api.Helpers
             return code;
         }
 
-        override public string Encrypt(string text)
+        public override string Encrypt(string text)
         {
+            if (string.IsNullOrEmpty(text)) return "";
             string code = "";
             foreach (char character in text)
             {

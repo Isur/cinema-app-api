@@ -17,9 +17,9 @@ namespace cinema_app_api.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Policy = "Worker")]
-    public class UserController : CrudController<Users>
+    public class UsersController : CrudController<Users>
     {
-        public UserController(IBaseCrudService<Users> crud) : base(crud) { }
+        public UsersController(IBaseCrudService<Users> crud) : base(crud) { }
 
         
         [HttpPost]
@@ -30,7 +30,7 @@ namespace cinema_app_api.Controllers
             if (string.IsNullOrEmpty(model.LastName)) return BadRequest("No last name");
             if (string.IsNullOrEmpty(model.UserName)) return BadRequest("No user name");
             if (string.IsNullOrEmpty(model.Password)) return BadRequest("No password");
-
+            
             var user = new Users
             {
                 FirstName = model.FirstName,
@@ -40,7 +40,7 @@ namespace cinema_app_api.Controllers
                 Password = PasswordHasher.Hash(model.Password),
             };
             var entity = _crud.AddItem(user);
-
+            if (entity == null) return BadRequest("User already exists");
             return Ok(new { user = entity });
         }
 

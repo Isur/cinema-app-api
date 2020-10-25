@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using cinema_app_api.Data;
+using cinema_app_api.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -84,6 +85,7 @@ namespace cinema_app_api
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
 
+            services.AddSingleton<IEncryptor, Ceasar>();
             services.AddTransient<IBaseCrudService<Halls>, HallsCrudService>();
             services.AddTransient<IBaseCrudService<Movies>, MoviesCrudService>();
             services.AddTransient<IBaseCrudService<Showings>, ShowingsCrudService>();

@@ -18,6 +18,7 @@ namespace cinema_app_tests
         [InlineData("bcdefghijklmnopqrstuvwxyza", "abcdefghijklmnopqrstuvwxyz")]
         [InlineData("Hfojvt xjuipvu fevdbujpo jt mjlf tjmwfs jo uif njof", "Genius without education is like silver in the mine")]
         [InlineData("Dbftbs DjqifS. :)", "Caesar CipheR. :)")]
+        [InlineData("", "")]
         public void EncodeTest(string expected, string input)
         {
             Assert.Equal(expected, _ceasar.Encrypt(input));
@@ -29,6 +30,7 @@ namespace cinema_app_tests
         [InlineData("abcdefghijklmnopqrstuvwxyz", "bcdefghijklmnopqrstuvwxyza")]
         [InlineData("Genius without education is like silver in the mine", "Hfojvt xjuipvu fevdbujpo jt mjlf tjmwfs jo uif njof")]
         [InlineData("Caesar CipheR. :)", "Dbftbs DjqifS. :)")]
+        [InlineData("", "")]
         public void DecodeTest(string expected, string input)
         {
             Assert.Equal(expected, _ceasar.Decrypt(input));
