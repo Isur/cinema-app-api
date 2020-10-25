@@ -49,14 +49,14 @@ namespace cinema_app_api.Repository
             return entity;
         }
 
-        public bool CheckIfFree(int x, int y)
+        public bool CheckIfFree(int x, int y, string showing)
         {
-            var ticket = _context.Tickets.FirstOrDefault(entity => entity.FieldX == x && entity.FieldY == y);
+            var ticket = _context.Tickets.FirstOrDefault(entity => entity.FieldX == x && entity.FieldY == y && entity.ShowingId == new Guid(showing));
             return ticket == null;
         }
 
-        public bool CheckIfCanUpdate(int x, int y, string id) {
-            var ticket = _context.Tickets.FirstOrDefault(entity => entity.FieldX == x && entity.FieldY == y && entity.Id != new Guid(id));
+        public bool CheckIfCanUpdate(int x, int y, string id, string showing) {
+            var ticket = _context.Tickets.FirstOrDefault(entity => entity.FieldX == x && entity.FieldY == y && entity.Id != new Guid(id) && entity.ShowingId == new Guid(showing));
             return ticket == null;
         } 
     }

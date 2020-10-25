@@ -32,7 +32,7 @@ namespace cinema_app_api.Controllers
             if(model.FieldX <= 0) return BadRequest("No fieldX");
             if(model.FieldY <= 0) return BadRequest("No fieldY");
             
-            var placeIsFree = _crud.CheckIfFree(model.FieldX, model.FieldY);
+            var placeIsFree = _crud.CheckIfFree(model.FieldX, model.FieldY, model.Showing);
             if (!placeIsFree) return BadRequest("Slot taken");
 
             var user = _crudUsers.GetItem(model.User);
@@ -66,7 +66,7 @@ namespace cinema_app_api.Controllers
             var user = _crudUsers.GetItem(model.User);
             var show = _crudShowings.GetItem(model.Showing);
 
-            var placeIsFree = _crud.CheckIfCanUpdate(model.FieldX, model.FieldY, id);
+            var placeIsFree = _crud.CheckIfCanUpdate(model.FieldX, model.FieldY, id, model.Showing);
             if (!placeIsFree) return BadRequest("Slot taken");
 
             var ticket = new Tickets
