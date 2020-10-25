@@ -27,6 +27,10 @@ namespace cinema_app_api.Repository
         public override List<Users> GetItems()
         {
             var entities = _context.Users.AsQueryable().ToList();
+            foreach (var entity in entities)
+            {
+                entity.Password = null;
+            }
             return entities;
         }
 
@@ -41,6 +45,7 @@ namespace cinema_app_api.Repository
         public override Users GetItem(string id)
         {
             var entity = _context.Users.Find(new Guid(id));
+            entity.Password = null;
             return entity;
         }
     }
